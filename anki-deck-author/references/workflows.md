@@ -9,6 +9,36 @@ Patterns developed for authoring, QC, and maintaining decks that span multiple s
 
 Each pattern explains *when* to reach for it and the *gotcha* that surfaced when we worked through it for the first time.
 
+## Path conventions
+
+The skill ships inside an `auto_srs`-style repo with this canonical layout. Use these paths in scripts and prompts unless the user has overridden them.
+
+| Path                            | Purpose                                       | In git? |
+|---------------------------------|-----------------------------------------------|---------|
+| `courses/<course>/`             | Source material (PDFs, slides, notes)         | gitignored |
+| `courses/<course>/scripts/`     | Course-specific bespoke build/patch scripts   | gitignored |
+| `anki-deck-author/`             | The skill itself (canonical source)           | tracked |
+| `anki-deck-author/scripts/`     | Reusable infrastructure (build, lint, verify) | tracked |
+| `anki-deck-author/examples/`    | Reference decks demonstrating principles      | tracked |
+| `scripts/`                      | Repo-wide generic tools                       | tracked |
+| `temp/decks/`                   | Built `.apkg` files (regeneratable)           | gitignored |
+| `temp/build/`                   | Intermediate build artifacts (extracted images, manifests) | gitignored |
+| `temp/reports/`                 | Audit/lint output JSONs                       | gitignored |
+
+Course-specific build scripts (`courses/<course>/scripts/build_<module>.py`) resolve paths relative to the repo root, e.g.:
+
+```python
+import os, sys
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
+sys.path.insert(0, os.path.join(REPO_ROOT, "anki-deck-author", "scripts"))
+from build_deck import DeckBuilder
+
+source_pdf = os.path.join(REPO_ROOT, "courses", "<course>", "<filename>.pdf")
+out_dir = os.path.join(REPO_ROOT, "temp", "decks")
+```
+
+The convention `<TOPIC>::<CODE>::<SubDeck>` is the standard internal deck-name shape for tree nesting in Anki. `<TOPIC>` is your top-level grouping (curriculum, semester, exam track), `<CODE>` is the module/source identifier, `<SubDeck>` is a content slice. Substitute consistently within a deck family.
+
 ## Pattern 1 — Parallel agents for multi-deck authoring
 
 **When:** the user provides ≥3 source documents (e.g., separate course modules) and wants a deck per document.
@@ -22,8 +52,8 @@ Each pattern explains *when* to reach for it and the *gotcha* that surfaced when
    - Path to its source PDF (bash sandbox path)
    - Path to SKILL.md and principles-detail.md (must read first)
    - Path to your reference build script (concrete example)
-   - Output destination (consistent naming: `CCC - {CODE}.apkg` or similar)
-   - Internal deck-naming convention for tree nesting (`CCC::{CODE}::{SubDeck}`)
+   - Output destination (consistent naming: `<TOPIC> - <CODE>.apkg` or similar)
+   - Internal deck-naming convention for tree nesting (`<TOPIC>::<CODE>::<SubDeck>`)
    - Card budget and any dropped-content rules
 3. Keep prompts self-contained — the agent has no memory of your conversation.
 
@@ -78,7 +108,7 @@ So if you ship a patch that increases cloze deletion counts, the user will see:
 - Their original deck looking *almost* right (missing the new cards)
 - A populated patch deck full of the new cards that should have gone to the original deck
 
-This is what happened to us in CCC patch v2: 113 cards landed in `CCC::Patch v2` deck because many patches atomized lists from 1 cloze to 4–5.
+This is what happened during the CCC patch v2 iteration that originated this catalog: 113 cards landed in the patch deck because many patches atomized lists from 1 cloze to 4–5.
 
 **The fix is post-import card relocation** — see Pattern 4.
 
@@ -115,7 +145,7 @@ def call(action, **params):
 # Examples:
 call("version")                                          # sanity check
 call("deckNames")                                        # list all decks
-call("findNotes", query='deck:"CCC::CO 101"')            # search
+call("findNotes", query='deck:"<TOPIC>::<CODE>"')        # search
 call("notesInfo", notes=[1234, 5678])                    # fetch full data
 call("updateNoteFields", note={"id": 1234, "fields": {"Front": "..."}})
 call("addNote", note={"deckName": "...", "modelName": "...", "fields": {...}})
@@ -178,18 +208,19 @@ fetch('http://localhost:8765', {
 **How:** use AnkiConnect's `findCards` / `findNotes` with deck-filter queries. Aggregate counts client-side:
 
 ```javascript
+const TOPIC = '<TOPIC>'; // e.g., your top-level deck namespace
 const decks = await call('deckNames');
-for (const d of decks.filter(d => d.startsWith('CCC'))) {
+for (const d of decks.filter(d => d.startsWith(TOPIC))) {
   const cards = await call('findCards', {query: `deck:"${d}"`});
   console.log(`${d}: ${cards.length}`);
 }
 ```
 
-If you need GUIDs (e.g., to compare against a patch list), have the user re-export `.apkg` and read it from `/Users/pythagor/CCC/CCC.apkg` via the bash sandbox. Map `(GUID → note ID)` in Python, then drive deletions through AnkiConnect with the resolved note IDs.
+If you need GUIDs (e.g., to compare against a patch list), have the user re-export `.apkg` to `temp/<deck>.apkg` and read it from there via the bash sandbox. Map `(GUID → note ID)` in Python, then drive deletions through AnkiConnect with the resolved note IDs.
 
 ## When NOT to use these patterns
 
 - Small decks (<60 cards): hand-author end-to-end. Parallel agents have coordination overhead that isn't worth it.
 - One-off conversational fixes: just ship a corrected `.apkg` directly.
 - Agent drift on a tiny deck: re-author yourself faster than QC pass + patch round.
-- The user hasn't installed AnkiConnect: fall back to script-and-paste (write a Python script to `/Users/pythagor/CCC/`, ask user to run it, paste output). The Chrome MCP bridge is also unavailable without the extension; script-and-paste covers both gaps.
+- The user hasn't installed AnkiConnect: fall back to script-and-paste (write a Python script to `temp/`, ask user to run it, paste output). The Chrome MCP bridge is also unavailable without the extension; script-and-paste covers both gaps.

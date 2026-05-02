@@ -217,7 +217,7 @@ class DeckBuilder:
     """Wrapper around genanki for an opinionated, well-designed Anki deck.
 
     Args:
-        deck_root: top-level deck name (e.g., "CCC :: Unit Symbology").
+        deck_root: top-level deck name (e.g., "<TOPIC> :: <CODE>").
         model_id_base: integer base for model IDs. Models get _base, _base+1, _base+2.
         deck_id_base: integer base for sub-deck IDs (auto-incremented per sub-deck).
         css: override the default CSS theme if you want a different look.

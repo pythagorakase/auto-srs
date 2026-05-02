@@ -147,17 +147,9 @@ The card model needs an Extra field. See `scripts/build_deck.py` for how to wire
 
 ## §6 — Avoid trivial cloze deletions
 
-**Failure mode:** Cloze deletions that can be answered by elimination teach nothing. They look like atomization but are noise.
+*Anti-pattern stub. Full treatment with worked example at **D5** in `references/common-ai-drift.md`.*
 
-**Bad:**
-```
-sector {{c1::1}} = capability<br>
-sector {{c2::2}} = mobility
-```
-
-The student sees `sector [...] = capability` and answers "1" — but only because there are 2 sectors and one says "2". They didn't actually recall that capability lives in sector 1; they deduced it.
-
-**Good:** Don't cloze the sector numbers in this multi-row form. Create separate single-cloze notes (see §13).
+Cloze deletions that can be answered by elimination teach nothing. The student sees `sector [...] = capability` next to `sector [...] = mobility` and answers "1" by eliminating "2" — not by recalling the attribution. Corrective rule: cloze only deletions that genuinely require recall.
 
 ---
 
@@ -225,7 +217,7 @@ When using a reusable template (#23), the first `<i>label:</i>` IS the heading e
 
 The student sees `disease: alzheimer` at the top and immediately knows what kind of card this is, what slots will follow, and what kind of recall is being asked. Adding `<u>Disease</u>` above would be redundant.
 
-**Rule of thumb:** `<u>` for one-off conceptual cards (CCC fundamentals, frame shapes, composition fields). Drop it for templated cards (medical disease, drug, anatomical region). The first `<i>label:</i>` does the work.
+**Rule of thumb:** `<u>` for one-off conceptual cards (foundational concepts, frame shapes, composition fields). Drop it for templated cards (medical disease, drug, anatomical region). The first `<i>label:</i>` does the work.
 
 ---
 
@@ -606,58 +598,17 @@ Note that not every cloze needs a hint. The five organism names (c2–c6) don't 
 
 ## §20 — Heading must not double as prompt
 
-**Failure mode:** A `<u>...</u>` heading on the front, alone, is ambiguous: is this a heading framing more content, or is the term itself the prompt?
+*Anti-pattern stub. Full treatment with worked example at **D6** in `references/common-ai-drift.md`.*
 
-**Bad:**
-```
-Front: <u>Company Team</u>
-Back: a combined-arms organization formed by attaching ... [long]
-```
-
-The student reads "Company Team" and isn't sure if they should:
-- Recall "what is a company team?" (definition recall)
-- Wait for more content (it's a heading)
-- Identify what category Company Team belongs to (classification)
-
-**Good:**
-```
-<u>Task Force Concepts</u><br>
-<i>term:</i><br>
-company team<br>
-<i>definition:</i><br>
-{{c1::combined-arms}} company augmented with {{c2::nonorganic}} platoons
-```
-
-Now the structure is unambiguous. The heading frames the topic; `<i>term:</i>` says "this is the term being defined"; `<i>definition:</i>` says "and this is what you need to recall."
+A `<u>...</u>` heading alone on the front is ambiguous — the student doesn't know whether to recall the definition, wait for more content, or classify the term. Corrective rule: pair the heading with `<i>term:</i>` and the term beneath, so the structure makes clear what's being asked.
 
 ---
 
 ## §21 — Compress verbose definitions; don't fall back to Basic
 
-**Failure mode:** A long doctrinal definition (50+ words) feels too verbose for cloze, so the author falls back to a Basic Q→A card with the whole paragraph on the back. The student is now memorizing a paragraph instead of atomic concepts.
+*Anti-pattern stub. Full treatment with worked example at **D7** in `references/common-ai-drift.md`.*
 
-**Bad (Basic Q→A with verbose back):**
-```
-Front: <u>Company Team</u>
-Back: a combined-arms organization formed by attaching one or more
-  nonorganic armor, mech infantry, Stryker infantry, or light infantry
-  platoons to a tank, mech infantry, Stryker, or infantry company —
-  in exchange for, or in addition to, its organic platoons.
-```
-
-**Good (compress, then cloze):**
-```
-<u>Task Force Concepts</u><br>
-<i>term:</i><br>
-company team<br>
-<i>definition:</i><br>
-{{c1::combined-arms}} company augmented with {{c2::nonorganic}} platoons
-```
-**Extra:** `e.g., tank company + attached infantry platoon`
-
-The 50-word doctrinal definition compresses to ~10 words capturing the essential idea (combined-arms, nonorganic platoons). Two clozes test the key terms. The illustrative example moves to the back extra.
-
-**Rule of thumb:** if a definition is too long to cloze, it's too long to memorize verbatim. Compress to the essential 1-2 facts, atomize those, and put illustrative material in the extra field.
+When a doctrinal definition runs 50+ words, the temptation is to ship it as a Basic Q→A. The student then memorizes a paragraph instead of atomic concepts. Corrective rule: compress to 1–3 essential terms, cloze those, push illustrative material to the extra field. Length is poor authoring, not a justification for changing format.
 
 ---
 
@@ -792,130 +743,29 @@ Eight tokens carry information density that would take three lines if spelled ou
 
 ## §26 — Most numbers don't belong inside a cloze
 
-**Failure mode:** exact recall of high-precision numbers (decimals, percentages, large counts, fractional rates) doesn't map cleanly onto Again/Hard/Good/Easy. The student guesses "28%" when the answer is "31.7%" and has no clean way to grade fuzzy recall — so the card teaches less than its review burden costs.
+*Anti-pattern stub. Full treatment with worked examples at **D3** in `references/common-ai-drift.md`.*
 
-**Bad:**
-```
-<i>BOA / PAX:</i> 1 per {{c1::43,000}} pop / {{c1::88}}
-```
+Exact recall of high-precision numbers (decimals, percentages, large counts, fractional rates) doesn't map cleanly onto Again/Hard/Good/Easy — the student guesses "28%" against "31.7%" and grading collapses. Corrective rule: numbers earn their place in a cloze only when (a) short (1–3 digits), (b) doctrinally canonical, and (c) themselves the testable atom (`Role 2`, `S4`, `4 vehicles`). Default fixes are reverse direction, move to extra, or simplify the testable fact.
 
-**Good — reverse the direction (cloze the unit, not the number):**
-```
-<i>BOA / PAX:</i> 1 per 43,000 pop / 88<br>
-<i>this is the:</i> {{c1::brigade medical supply}} office's allocation
-```
-
-**Good — move the number to extra:**
-```
-<i>BOA / PAX:</i> 1 per {{c1::theater}}-level supply office
-```
-**Extra:** `actual figure: 43,000 pop / 88 PAX`
-
-**Numbers earn their place in a cloze only when:**
-- short (1–3 digits)
-- doctrinally canonical (functioning as an identifier or label, not a measurement)
-- themselves the testable atom
-
-```
-<i>role:</i> {{c1::Role 2}} = forward surgical
-{{c1::S4}} = logistics
-{{c1::4}} vehicles per platoon
-```
-
-`Role 2`, `S4`, `4 vehicles` are doctrinal labels. The student doesn't need to grade fuzzy recall of "around two-ish" against "Role 2" — the doctrine pins it.
-
-**Caveat — allowed-in-cloze numbers can still leak via §28:** the same `{{c1::3}}` and `{{c2::20}}` that pass §26's allowance can become arithmetic leaks the moment another visible context exposes the product, sum, or ratio (e.g., "= 60 total"). §26 says *which* numbers can be cloze answers; §28 says *which surrounding context* makes those answers derivable. Both checks apply. See §28's ICWAD example.
+**Cross-principle nuance:** §26 says *which* numbers can be cloze answers; §28 says *which surrounding context* makes those answers derivable. Both checks apply — a card can pass §26's "short doctrinal integer" test and still leak via §28 if the surrounding context exposes the product, sum, or complement. See D8 for the ICWAD `= 60 total` example.
 
 ---
 
 ## §27 — Don't redundantly cloze abbreviations inside other templates
 
-**Failure mode:** when a unit / disease / section template has an `<i>abbreviation:</i>` slot and you cloze the abbreviation, you're testing **name → abbreviation**. That's the wrong direction. Abbreviations are looked up (acronym → expansion), not recalled from full names. The student encounters "MLMC" in a memo and looks up "medical logistics management center" — never the reverse.
+*Anti-pattern stub. Full treatment with worked example at **D1** in `references/common-ai-drift.md`.*
 
-**Bad:**
-```
-<i>unit:</i><br>medical logistics management center<br>
-<i>abbreviation:</i><br>{{c1::MLMC}}<br>
-<i>BOA:</i><br>1 per force
-```
-
-**Good:**
-```
-<i>unit:</i><br>MLMC (medical logistics management center)<br>
-<i>BOA:</i><br>{{c1::1 per force}}
-```
-
-The abbreviation moves into the heading line — visible, not testable. The student passively encounters it during review of other slots in the template.
-
-If the lookup direction (MLMC → expansion) is itself testable, ship a separate Basic acronym card per §24:
-
-```
-Front: MLMC
-Back:  medical logistics management center
-```
-
-Plain Basic, not Basic-and-Reversed. Same rule as §24: you only encounter abbreviations one direction in source material.
+Clozing the abbreviation inside a unit/disease/section template tests name → abbreviation, the wrong direction. Abbreviations are looked up, not recalled from full names. Corrective rule: keep the abbreviation visible in the heading line (`<i>unit:</i><br>MLMC (medical logistics management center)`) and ship a separate Basic acronym card per §24 for the actual lookup.
 
 ---
 
 ## §28 — Answer leaks via derivation
 
-**Failure mode:** a cloze answer is derivable from other visible context — arithmetic, logical complement, cardinality, or format hints — so the student answers without actually recalling the testable knowledge.
+*Anti-pattern stub. Full treatment with all four leak mechanisms (arithmetic, logical complement, cardinality, format hint) and worked examples at **D8** in `references/common-ai-drift.md`.*
 
-This extends §5 (synonym/exemplar leaks) and §6 (elimination among adjacent clozes). The four mechanisms to watch for:
+Beyond synonym leaks (§5) and elimination (§6), watch for *derivation leaks* where one cloze answer is derivable from other visible context. The institutional self-check: *if a forgetful student saw this card for the first time, could they answer the cloze WITHOUT recalling the testable knowledge?* The fresh-agent leak audit (SKILL.md workflow step 7) is the scaled-up version.
 
-### Arithmetic leak
-
-**Bad** (real example from CCC unit-symbology deck):
-```
-<i>unit:</i><br>ICWAD - hospital aug det (ICW)<br>
-<i>config:</i><br>{{c1::3}} wards × {{c2::20}} ICW each = 60 total
-```
-"= 60 total" leaks `{{c2::20}}` via division (60 ÷ 3 = 20). The student sees "3 wards × [...] ICW each = 60 total" and answers "20" by arithmetic, not by recalling the doctrinal config. Same problem with sums, ratios, or percentages of a stated whole.
-
-**Fix:** drop the derivable value entirely.
-```
-<i>unit:</i><br>ICWAD - hospital aug det (ICW)<br>
-<i>config:</i><br>{{c1::3}} wards × {{c2::20}} ICW each
-```
-
-Note that **the cloze numbers themselves are fine** — `3` and `20` are short, doctrinally canonical, and themselves the testable atoms (§26's narrow allowance). The leak isn't the numbers; it's the visible total. Same numbers, different context = different verdict. This is a classic §26-meets-§28 case: each principle clears the card on its own, but together they catch the issue.
-
-**Alternative fix:** link all derivable values under the same cloze number so revealing one reveals all (`{{c1::3}} wards × {{c1::20}} ICW each = {{c1::60}} total`). Less common — usually dropping the total is cleaner.
-
-### Logical complement
-
-**Bad:**
-```
-operations are {{c1::offensive}} or defensive
-```
-If "offensive or defensive" exhausts the space and "defensive" is visible, knowing the dichotomy trivially reveals "offensive."
-
-**Fix:** cloze both halves under one number, or move the dichotomy framing to extra.
-
-### Cardinality cheat
-
-**Bad:**
-```
-the four steps are receipt, mission analysis, COA development, {{c1::COA approval}}
-```
-"Four" tells the student to expect a fourth slot; three visible items leave exactly one gap. The cloze tests reading comprehension, not recall.
-
-**Fix:** drop the count, or make all four positions cloze (linked under c1 if conceptually one set).
-
-### Format hints over-constraining
-
-**Bad:**
-```
-the call sign is {{c1::Bravo::#}}
-```
-The `[#]` type cue tells the student "expect a digit" — but Bravo isn't a digit. The hint contradicts the answer (and over-narrows when used correctly).
-
-**Fix:** §19's "when NOT to use" applies. Use type cues only when they genuinely reduce ambiguity without giving away the answer's shape.
-
-### The self-check
-
-Before shipping a card, ask: *if a forgetful student saw this card for the first time, could they answer the cloze WITHOUT recalling the testable knowledge?* If yes, drop or rearrange the leaking element. The fresh-agent leak audit (SKILL.md workflow step 7) is the institutionalized version of this check for larger decks.
+**Cross-principle nuance:** §26 (number allowance) and §28 (derivation leak) overlap on numeric clozes but are independent checks. A `{{c1::3}}` can pass §26 and still fail §28 if a visible "= 60 total" leaks the related `{{c2::20}}` via division. Apply both.
 
 ---
 
@@ -950,47 +800,11 @@ This is §23 made strict: §23 says "fixed slot order across the template family
 
 ## §30 — Show acronym OR expansion, never both
 
-**Failure mode:** a card pairs the expansion with the parenthetical acronym (or vice versa) in a way that lets the student decode the cloze trivially from the visible context.
+*Anti-pattern stub. Full treatment with worked example at **D11** in `references/common-ai-drift.md`.*
 
-**Bad** (real example from CO 102 fresh build):
-```
-<u>Ambulance Shuttle System Components</u><br>
-{{c1::ambulance loading point}} (ALP)<br>
-{{c2::ambulance relay point}} (ARP)<br>
-{{c3::ambulance control point}} (ACP)
-```
+Pairing `{{c1::ambulance loading point}} (ALP)` lets the student decode the cloze from the parenthetical. Corrective rule: pick one form per card. The acronym → expansion lookup direction lives in its own one-direction Basic card per §24; every other card uses either the acronym alone or the expansion alone, never both visible together.
 
-The student sees `[...] (ALP)` and decodes "ambulance loading point" from the acronym. The cloze tests acronym → expansion lookup, not recall — and that lookup already lives in a separate Basic acronym card per §24.
-
-**Good — pick one form per card:**
-
-```
-<u>Ambulance Shuttle System Components</u><br>
-{{c1::ALP}}<br>
-{{c2::ARP}}<br>
-{{c3::ACP}}
-```
-Or:
-```
-<u>Ambulance Shuttle System Components</u><br>
-{{c1::ambulance loading point}}<br>
-{{c2::ambulance relay point}}<br>
-{{c3::ambulance control point}}
-```
-
-Either is fine. The acronym lookup direction is owned by separate Basic cards per §24:
-
-```
-Front: ALP    Back: ambulance loading point
-Front: ARP    Back: ambulance relay point
-Front: ACP    Back: ambulance control point
-```
-
-Every other card in the deck trusts that lookup and uses one form.
-
-**The exception** (per §27): keeping the abbreviation visible in the heading line (`<i>unit:</i><br>MLMC (medical logistics management center)`) is fine as long as the acronym/expansion isn't *itself* the cloze. The point of §30 is "don't let the parenthetical reveal a clozed answer." A non-clozed heading that disambiguates the unit doesn't violate that — the parenthetical isn't leaking anything testable.
-
-**Cross-references:**
-- §24 — acronym → expansion lives in its own one-direction Basic card
-- §27 — don't cloze the abbreviation slot inside a template (the *direction* problem)
-- §30 — don't pair expansion with acronym anywhere a cloze answer is involved (the *leak* problem)
+**Cross-references — three principles, three problems:**
+- **§24** — acronym → expansion lives in its own one-direction Basic card (the *which-card-handles-lookup* answer)
+- **§27** — don't cloze the abbreviation slot inside a template (the *direction* problem)
+- **§30** — don't pair expansion with acronym anywhere a cloze answer is involved (the *leak* problem)

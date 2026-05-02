@@ -7,7 +7,7 @@ author or fresh-agent reviewer decides which flags are false positives.
 
 Usage:
     python lint_deck.py path/to/deck.apkg [--strict] [--show-suppressed]
-    python lint_deck.py --anki-deck "CCC::CO 102: BCTs" [--strict] [--show-suppressed]
+    python lint_deck.py --anki-deck "<TOPIC>::<CODE>" [--strict] [--show-suppressed]
 
 --anki-deck: query a live Anki deck root through AnkiConnect; exact deck and
 descendant subdecks are included. Repeat --anki-deck to lint multiple roots as

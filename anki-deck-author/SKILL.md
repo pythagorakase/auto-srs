@@ -47,6 +47,17 @@ Treat the first italic label as roughly an **SQL table name** and later italic l
 
 This is the practical version of reusable templates (#23) and abstract slot labels (#29). If a label contains a specific platform, unit, model, named program, person, place, or other row value, assume the schema is under-normalized until proven otherwise. Move the specific entity into the value under an abstract label, then use stable column labels for the rest of the note.
 
+## Principles vs. drift catalog — two lenses on the same content
+
+Two artifacts cover the design rules from different angles:
+
+- **Principles (this file + `references/principles-detail.md`)** — *positive rules*. What to do, what to structure, what to atomize. Read these to understand the system.
+- **Drift catalog (`references/common-ai-drift.md`)** — *AI-failure-mode lens*. Each entry names a recurring antipattern, explains *why AI tends to commit it*, and gives the corrective rule. Read this to inoculate against drift before authoring.
+
+Where a principle is fundamentally an anti-pattern ("don't do X") and has a corresponding D# entry in the drift catalog, the principles list keeps a one-line **stub** — preserving the §-number for citation but deferring the deep treatment to the drift catalog. The mapping table in `common-ai-drift.md` is the cross-index.
+
+**Numbering convention:** §1–§30 and D1–D18 are stable IDs. Append new entries; never renumber. Retired or stubbed entries stay in place with a forward-pointer.
+
 ## The 30 principles
 
 ### Atomization & coverage
@@ -83,16 +94,16 @@ This is the practical version of reusable templates (#23) and abstract slot labe
     - **Attribute-type labels** in complex multi-attribute cards (`{{c2::males::gender}}`, `{{c4::trunk::location}}`, `{{c3::yellow/white::color}}`) — the hint tells the student *which attribute they're recalling* without revealing the specific value.
     Don't use when surrounding structure already implies the type. §19.
 
-### Anti-patterns to avoid
+### Anti-pattern stubs (full treatment in drift catalog)
 
 3. **Cloze the atom, not the wrapper** — `{{c1::main icon}} and modifiers`, not `{{c1::Main Icon and Modifiers}}`. Supporting context becomes the prompt; only the atom is hidden. §3.
-6. **No trivial cloze deletions** — cloze deletions answerable by elimination (`{{c1::1}}` and `{{c2::2}}` next to each other) teach nothing. They look like atomization but are noise. §6.
-20. **Heading must not double as prompt** — `<u>Company Team</u>` alone on the front is ambiguous. Pair with `<i>term:</i>` and the actual term beneath, so the student knows what's structural vs. testable. §20.
-21. **Compress verbose definitions; don't fall back to Basic** — when a doctrinal definition is long, the move is to compress it (drop redundant qualifiers, summarize) and use 2-3 cloze atoms — NOT to abandon cloze for Basic Q→A. Length is a sign of poor authoring, not a justification for changing format. §21.
-26. **Most numbers don't belong inside a cloze** — exact numbers (decimals, percentages, ratios with multiple digits, fractional rates, headcounts, large counts) make terrible cloze answers because grading collapses for fuzzy recall. The student guesses "28%" when the answer is "31.7%" and has no clean way to map that onto Again/Hard/Good/Easy. **Numbers have to earn their place inside a cloze.** Default fixes: (a) reverse the direction — cloze the *thing* the number describes (e.g., `{{c1::AML}} = 0.333 per division HQ`); (b) move the number to the extra field; (c) simplify to a less-precise testable fact ("which component is largest?") with the exact value in extra. Allowed in cloze only if the number is short, doctrinally canonical, and is itself the testable atom (`Role 1`, `Role 2`, `S4 = logistics`, `4 vehicles`, `20 cots`). §26.
-27. **Don't redundantly cloze abbreviations inside other templates** — when the `<i>abbreviation:</i>` slot appears as a cloze in a unit/disease/section template, you're testing name → abbreviation, the wrong direction. Abbreviations are looked up, not recalled from full names. The fix is to keep the abbreviation **visible in the heading or template prefix** (so the student passively encounters it during review of other slots) and ship a separate Basic acronym card per #24 for the actual lookup. Example: `<i>unit:</i> MLMC (medical logistics management center)` as the heading, then BOA / function / etc. as cloze slots. §27.
-28. **Answer leaks via derivation** — beyond synonym leaks (#5) and elimination (#6), watch for *derivation leaks* where one cloze answer is derivable from other visible context: arithmetic (`3 wards × {{c2::20}} ICW each = 60 total` — 60 leaks 20 via division), logical complement (if "A or B" exhausts the space, knowing one reveals the other), cardinality (4-item visible list with 3 items showing), or format hints (a `[#]` placeholder strongly suggests a digit-shaped answer). Before shipping a card, ask: *if a forgetful student saw this for the first time, could they answer without recalling the testable knowledge?* If yes, drop or rearrange the leaking element. §28.
-30. **Show acronym OR expansion, never both** — `{{c1::ambulance loading point}} (ALP)` neutralizes the cloze: the parenthetical gives the answer away. Pick one form. The acronym lookup direction (acronym → expansion) gets its own one-direction Basic card per §24; every other card trusts that lookup card and uses **either** the acronym alone (`<i>section:</i><br>ALP`) **or** the expansion alone (`<i>section:</i><br>ambulance loading point`). Never both visible together. §30.
+6. **No trivial cloze deletions** — anti-pattern stub; full treatment at **D5** in `references/common-ai-drift.md`. Corrective rule: cloze only deletions that genuinely require recall, not those answerable by elimination from adjacent context.
+20. **Heading must not double as prompt** — anti-pattern stub; full treatment at **D6**. Corrective rule: pair the `<u>` heading with `<i>term:</i>` and the term beneath, so the student knows what's structural vs. testable.
+21. **Compress verbose definitions; don't fall back to Basic** — anti-pattern stub; full treatment at **D7**. Corrective rule: compress the definition to 1–3 essential atoms and cloze them, rather than shipping a long paragraph as a Basic Q→A back.
+26. **Most numbers don't belong inside a cloze** — anti-pattern stub; full treatment at **D3**. Corrective rule: numbers have to earn their place inside a cloze. Default fixes are reverse the direction (cloze the thing, not the number), move to the extra field, or simplify to a less-precise testable fact. Allowed in cloze only if short, doctrinally canonical, and itself the testable atom (`Role 1`, `S4`, `4 vehicles`).
+27. **Don't redundantly cloze abbreviations inside other templates** — anti-pattern stub; full treatment at **D1**. Corrective rule: keep the abbreviation visible in the heading line and ship a separate Basic acronym card per §24 for the actual lookup direction.
+28. **Answer leaks via derivation** — anti-pattern stub; full treatment at **D8**. Beyond synonym leaks (§5) and elimination (§6), watch for derivation leaks: arithmetic, logical complement, cardinality, or format hints. Corrective rule: before shipping, ask if a forgetful student could answer the cloze without recalling the testable knowledge. If yes, drop or rearrange the leaking element.
+30. **Show acronym OR expansion, never both** — anti-pattern stub; full treatment at **D11**. Corrective rule: pick one form per card. The acronym lookup direction lives in its own one-direction Basic card per §24; every other card uses either the acronym alone or the expansion alone, never both visible together.
 
 ### Note-author craft
 
@@ -126,7 +137,7 @@ Read the source. Identify:
 
   **When the LOs don't mention a category, don't invent that test direction.** A deck whose source has unit-symbol illustrations on the slides but no symbol-decoding LO should not ship symbol → name cards just because the symbols are visible. Image extraction is a real cost (PDF cropping, header artifacts, media-folder bloat) that should only be paid when the LO requires it.
 
-  Symbol-heavy decks are the exception, not the default. Most CCC modules are text-only; CO 101 (Military and AMEDD Terms and Symbols) is the canonical symbology exception because its LO explicitly says "describe military unit symbols, control measures, and tactical mission symbols."
+  Symbol-heavy decks are the exception, not the default. Most modules are text-only and the LO will reflect that. The canonical symbology exception (from this skill's originating use case, the Army CCC's CO 101 module) had an LO explicitly directing "describe military unit symbols, control measures, and tactical mission symbols" — a clear image-decoding signal that justified the image-extraction cost.
 
 - **Domain templates** (#23) — what reusable patterns will dominate this deck? For a medical deck: disease, drug, anatomical region, syndrome. For a history deck: event, person, treaty, war. **Define 3-7 templates with fixed slot orders before drafting any cards.** This is the single highest-leverage step in deck design.
 - **Clozable concepts** — multi-fact statements, lists, attribution maps, taxonomies

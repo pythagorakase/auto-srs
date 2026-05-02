@@ -18,12 +18,14 @@ one combined corpus.
 Suppression tags: add lint-ok-d17 to suppress a specific D# for a manually
 reviewed note, or lint-ok-all for rare note-wide suppression.
 
-Coverage: 16 of 18 drift patterns are implemented (D1, D2, D3, D5, D6, D8, D9,
-D10, D11, D12, D13, D14, D15, D16, D17, D18). D4 (asymmetric attribution that needs thin-slicing per §7) and D7
-(verbose Basic Q→A that should have been compressed cloze per §21) are not
-implemented because regex can't decide when a multi-cloze list crosses into
-asymmetric attribution, or when a Basic answer is "too verbose to be Basic."
-Catch those in the fresh-agent leak audit (SKILL.md workflow step 7).
+Coverage: 16 of 19 drift patterns are implemented (D1, D2, D3, D5, D6, D8, D9,
+D10, D11, D12, D13, D14, D15, D16, D17, D18). D4 (asymmetric attribution that
+needs thin-slicing per §7), D7 (verbose Basic Q→A that should have been
+compressed cloze per §21), and D19 (high-volume low-density output from one
+source) are not implemented because they require judgment the linter can't make
+from the .apkg alone — D4 and D7 need semantic understanding, D19 needs source-
+topic attribution that lives outside the .apkg. Catch them in the fresh-agent
+leak audit (SKILL.md workflow step 7).
 
 When adding new drift rules: append-only. Don't renumber existing rules — the
 D# IDs are stable across SKILL.md, common-ai-drift.md, and this file.

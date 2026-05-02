@@ -23,6 +23,7 @@ The skill ships inside an `auto_srs`-style repo with this canonical layout. Use 
 | `scripts/`                      | Repo-wide generic tools                       | tracked |
 | `temp/decks/`                   | Built `.apkg` files (regeneratable)           | gitignored |
 | `temp/build/`                   | Intermediate build artifacts (extracted images, manifests) | gitignored |
+| `temp/build/<deck>-outline.yaml` | Step 2.5 yield-gate outline (per deck)        | gitignored |
 | `temp/reports/`                 | Audit/lint output JSONs                       | gitignored |
 
 Course-specific build scripts (`courses/<course>/scripts/build_<module>.py`) resolve paths relative to the repo root, e.g.:
@@ -38,6 +39,50 @@ out_dir = os.path.join(REPO_ROOT, "temp", "decks")
 ```
 
 The convention `<TOPIC>::<CODE>::<SubDeck>` is the standard internal deck-name shape for tree nesting in Anki. `<TOPIC>` is your top-level grouping (curriculum, semester, exam track), `<CODE>` is the module/source identifier, `<SubDeck>` is a content slice. Substitute consistently within a deck family.
+
+## Pattern 0 — Outline-first authoring with yield gate
+
+**When:** any deck-authoring task with a non-trivial source (PDF slide pack, lecture notes, multi-page document). Effectively always — the only time to skip Pattern 0 is when the user provides a hand-curated set of facts that already passed their own triage.
+
+**Why upstream:** the linter and self-audit catch drift in *individual notes*, but they can't catch the drift where the AI authored notes from content that shouldn't have produced any. §31 (yield-density triage gate) and §32 (matrix bundling) are the principles that gate this; the outline is the artifact that operationalizes them. See SKILL.md Step 2.5 for the canonical schema.
+
+**How:**
+
+1. After the prep pipeline (SKILL.md Step 2: extract → clean → organize → prioritize → plan schemas), emit a YAML outline at `temp/build/<deck>-outline.yaml`. **Topic-keyed, not slide-keyed.**
+2. Show the outline path to the user and wait for explicit approval.
+3. Only then proceed to drafting the manifest (Step 3).
+
+**Schema (excerpted from SKILL.md Step 2.5):**
+
+```yaml
+deck: <topic>::<code>
+source: courses/<course>/<file>.pdf
+topics:
+  - id: evacuation_standards
+    source_refs: [17]              # multi-slide topics list multiple refs
+    yield: high
+    shape: matrix
+    dimensions: [3, 2]
+    axes: [priority, stage]
+    est_notes: 6
+    rationale: "6 doctrinally canonical integer timing cells; LO #N"
+  - id: patient_movement_policy
+    source_refs: [24]
+    yield: skip                    # §31 gate: editorial bullets, no atomic facts
+    shape: bullets
+    est_notes: 0
+    rationale: "fails §31 condition (a) — fewer than 3 atomic facts"
+  - id: triage_decision_flow
+    source_refs: [9, 10, 11]       # one topic across multiple slides
+    yield: high
+    shape: process-flow
+    est_notes: 4
+    rationale: "decision-tree atoms; LO #M"
+```
+
+**Gotcha — the slide is not the unit of judgment.** The most common authoring failure is treating each slide as one "thing to card." Real decks have topics that span slides, slides that contain multiple unrelated topics, and slides that contribute nothing. The `source_refs` list is intentionally a list, not a scalar.
+
+**Gotcha — "balanced" matrices that aren't.** §32 bundling assumes a roughly balanced N × M grid. Asymmetric attribution (one row has 1 attribute, another has 4) is §7 territory. Mark `shape: matrix` only when cells are comparable; otherwise apply §7 thin-slicing.
 
 ## Pattern 1 — Parallel agents for multi-deck authoring
 

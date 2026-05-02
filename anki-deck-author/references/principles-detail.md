@@ -808,3 +808,91 @@ Pairing `{{c1::ambulance loading point}} (ALP)` lets the student decode the cloz
 - **§24** — acronym → expansion lives in its own one-direction Basic card (the *which-card-handles-lookup* answer)
 - **§27** — don't cloze the abbreviation slot inside a template (the *direction* problem)
 - **§30** — don't pair expansion with acronym anywhere a cloze answer is involved (the *leak* problem)
+
+---
+
+## §31 — Yield-density triage gate
+
+**Failure mode:** the AI authors notes for every slide it sees, even when the slide carries fewer than 3 atomic, high-yield, otherwise-not-recallable facts. Templated nonsense from low-yield content is the signature of this drift (see **D19** in `references/common-ai-drift.md` for the post-hoc detection signal). The author is solving the wrong problem: producing notes that pass linting rather than producing notes worth making.
+
+**The unit of judgment is the topic / information unit, not the slide.** A topic may span multiple slides; a single slide may contain multiple unrelated topics; some slides contribute nothing testable at all. Slides are presentation packaging — don't let them drive content decisions. Group source content into topics during the *organize* stage of the prep pipeline (SKILL.md Step 2c), then apply this gate per topic in the *prioritize* stage (Step 2d).
+
+**Three-condition test** (mirroring §26's structure for per-fact yield, applied at the topic level): a topic deserves a card-family when
+
+- (a) it contains **≥3 atomic facts** — single-fact topics are usually a context note in `extra` or a footnote, not a card-family,
+- (b) those facts are **unlikely to be available at test-time without memorization** — content any practitioner in the target field would already know from background isn't a recall target,
+- (c) they are **aligned with the LOs** from Step 1 — content outside the test scope is scaffolding even when it's information-dense.
+
+A topic that fails any condition is **scaffolding**. Compress to a single context note (the gist of the topic in one card, often inside `extra`) **or** skip entirely. Do not fill a template just because the template fits.
+
+**High-yield example — keep:**
+```
+Source: a 3 × 2 matrix on a single slide — priority (urgent / priority / routine)
+× stage (POI / patient transfer) → time-to-evacuate.
+6 cells of doctrinally canonical integer timing data, all listed in the LOs.
+
+Yield: high. Passes (a) ≥3 atoms, (b) not background knowledge, (c) LO-aligned.
+Schema (per §32): bundled matrix, 6 notes / 12 cards.
+```
+
+**Low-yield example — skip:**
+```
+Source: a slide of editorial bullets — "policy considerations include
+operational environment, clinical imperatives, JCS advice, theater commander
+recommendation, last policy day, surge capability..."
+
+Yield: skip. Fails (a) — there are bullet points but they're scaffolding for
+the next slide's actual content, not standalone atomic facts. Authoring 9
+templated notes from this slide produces things like
+`<i>policy fact:</i><br>not<br><i>value:</i><br>{{c1::hold until last policy day}}` —
+the label is nonsense, the atom is editorial. Mark `yield: skip` in the
+outline (Step 2.5); produce zero notes.
+```
+
+**Cross-references:**
+- **§26** (numbers earn their place) — sibling principle. §26 gates *individual cloze answers within a note*; §31 gates *whether a topic is a source at all*. Both apply.
+- **D14** (vague/editorial labels) — the per-note signal that §31 was missed during prioritization. Catch it earlier with §31; catch what slips through with D14.
+- **D19** (high-volume, low-density output) — the family-level signal of the same failure. If you find a D19-shaped family in self-audit, it's evidence that the originating topic should have been gated out by §31.
+
+---
+
+## §32 — Bundle dense matrices as bidirectional families
+
+**Failure mode:** N × M numerical or categorical matrices (3 priorities × 2 stages, 4 stages × 3 metrics) get collapsed into single-cloze-per-row notes that hide the matrix structure. The student memorizes per-row trivia instead of the grid relationships, and individual cells can't be tested in both directions.
+
+**Bad** (collapsed to one note per row, structure lost):
+```
+<i>evacuation standard:</i><br>24 hr from POI / 72 hr patient transfer<br>
+<i>category:</i><br>{{c1::routine}}
+```
+
+There's no way to test "given priority + stage, recall time" or "given time + stage, recall priority." The student memorizes `routine = 24 hr from POI / 72 hr patient transfer` as a single string, and Anki grading collapses to "did I produce this exact string?" — which doesn't track recall of either axis.
+
+**Good** (one note per cell, shared template, multi-cloze for bidirectionality):
+```
+<u>Evacuation Standards</u><br>
+<i>priority:</i><br>{{c1::urgent}}<br>
+<i>stage:</i><br>POI<br>
+<i>time:</i><br>{{c2::60 minutes}}
+```
+
+(Repeat for each of the 6 cells: 3 priorities × 2 stages.)
+
+Each note generates 2 cards via multi-cloze: one with priority hidden (test "given stage + time, recall priority") and one with time hidden (test "given priority + stage, recall time"). Stage stays visible. 6 notes × 2 cards = 12 cards covering the matrix bidirectionally. If you wanted 3-direction testability, cloze stage too: 6 notes × 3 cards = 18 cards.
+
+**Pattern recipe:**
+
+- **A single shared template with consistent slot order** (e.g., `priority / stage / time`) — this is §23 specialized for matrix-shaped data.
+- **One note per cell** (N × M notes total).
+- **Multi-cloze deletions** chosen to test in multiple directions per cell. The axis you don't cloze stays visible as the "given" context.
+- **Optional**: a top-header `<u>...</u>` framing the matrix. Use the header **only when it lets the slot labels be shorter** — e.g., `<u>Evacuation Standards</u>` lets each slot say `priority` instead of `evacuation priority`, `stage` instead of `evacuation stage`. Most matrices don't need a header. The italic slot labels carry the matrix identity on their own.
+
+**When NOT to use §32:**
+
+- **§12 (Basic-and-Reversed)** is the wrong tool for matrices. Basic-and-Reversed is a 2-field pair generating 2 cards; a matrix is N × M cells. Multi-cloze inside a §32-shaped note gives per-cell bidirectionality without the note-count explosion you'd get from chaining Basic-and-Reversed pairs.
+- **Asymmetric attribution** (sector 1 has 1 attribute, sector 2 has 4 attributes) is §7 territory, not §32. §7 thin-slices to prevent cardinality cheating; §32 assumes a roughly balanced grid.
+
+**Cross-references:**
+- **§23** (reusable templates) — §32 is §23 specialized for N × M data. The shared template carries the matrix identity; the bundling enables bidirectional testability per cell.
+- **§12** (Basic-and-Reversed) — wrong tool for matrices; included here as a pointer so the AI doesn't reach for it instinctively.
+- **§7** (asymmetric thin-slicing) — orthogonal failure mode for unbalanced shapes; cite §7 instead when cells aren't comparable.

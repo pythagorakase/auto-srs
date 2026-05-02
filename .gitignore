@@ -32,5 +32,8 @@ anki-deck-author/reports/
 # Legacy ephemeral files
 delete_guids.txt
 
+# Working notes / handoff scratch pad — not committed
+TODO.md
+
 # Keep the example deck inside the skill (otherwise *.apkg would catch it)
 !anki-deck-author/examples/*.apkg

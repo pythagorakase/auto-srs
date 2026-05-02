@@ -24,13 +24,22 @@ auto_srs/
 
 ## Setup
 
+Requires [`uv`](https://docs.astral.sh/uv/) (`brew install uv` on macOS).
+
 ```bash
 # Clone
 git clone https://github.com/pythagorakase/auto-srs.git
 cd auto-srs
 
-# Install Python deps
-pip install -r requirements.txt
+# Create venv and install deps from pyproject.toml + uv.lock
+uv sync
+```
+
+This installs the `lint-deck` and `verify-deck` console scripts and exposes `anki_deck_author` as an importable package:
+
+```bash
+uv run lint-deck anki-deck-author/examples/preclerkship-neuroscience.apkg
+uv run verify-deck path/to/deck.apkg
 ```
 
 ## Using the skill across harnesses

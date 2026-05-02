@@ -115,8 +115,12 @@ def verify(apkg_path: str) -> int:
     return 0
 
 
-if __name__ == "__main__":
+def main():
     if len(sys.argv) < 2:
-        print("Usage: python verify_deck.py path/to/deck.apkg")
+        print(f"Usage: {sys.argv[0]} path/to/deck.apkg")
         sys.exit(2)
     sys.exit(verify(sys.argv[1]))
+
+
+if __name__ == "__main__":
+    main()

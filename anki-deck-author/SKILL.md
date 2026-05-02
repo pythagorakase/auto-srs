@@ -71,7 +71,7 @@ Where a principle is fundamentally an anti-pattern ("don't do X") and has a corr
 
 2. **Linkage** — same cloze number for repeated testable terms, AND for conceptually-paired terms (cause↔effect, anatomy↔function) when the pairing is intuitive. Don't link concepts that require external scaffolding the future-self might not retain. If the same string repeats within one note, do not mix visible and clozed occurrences: either leave every occurrence visible, or put every occurrence behind the same linked cloze. §2.
 12. **Basic-and-Reversed for *test-symmetric* pairs only** — term ↔ definition, image ↔ name, language A ↔ language B. **Direction follows the test, not the data's symmetry.** If the student will encounter "see symbol → identify it" but never "name a unit → draw the symbol", use one-direction Basic, not Basic-and-Reversed. Default questions to ask: *In what context will the student need this knowledge? Will they be reading or producing?* Image-recognition tests (military symbols, anatomy, chemical structures, sheet music) are usually one-direction (image → name). Translation drills and term-definition pairs are usually bidirectional. When in doubt, ask the user. §12.
-24. **Acronym-expansion as one-direction Basic** — terse front (the acronym), expansion on back. Add `<div>(domain)</div>` disambiguator when the acronym overlaps domains (e.g., `AC` = adenylyl cyclase in biochem, alternating current in physics). Use plain Basic, not reversed — you encounter expansions naturally in source material. §24.
+24. **Acronyms as multi-cloze per word, routed to a central Acronyms deck** — `<i>acronym:</i><br>TLAMM<br><i>expansion:</i><br>{{c1::theater}} {{c2::lead}} {{c3::agent}} for {{c4::medical}} {{c5::materiel}}`. Each content word is its own cloze; partial recall is partial credit, not total failure. Acronym notes route to a shared `<TOPIC>::Acronyms` sub-deck (cross-module — doesn't count against per-module deck-size budgets). Use one-direction Basic only when the expansion is 1–2 trivial words. Add an `<i>domain:</i>` slot when the acronym overlaps domains. §24.
 
 ### Layout & visual hierarchy (mobile ergonomics)
 
@@ -101,9 +101,9 @@ Where a principle is fundamentally an anti-pattern ("don't do X") and has a corr
 20. **Heading must not double as prompt** — anti-pattern stub; full treatment at **D6**. Corrective rule: pair the `<u>` heading with `<i>term:</i>` and the term beneath, so the student knows what's structural vs. testable.
 21. **Compress verbose definitions; don't fall back to Basic** — anti-pattern stub; full treatment at **D7**. Corrective rule: compress the definition to 1–3 essential atoms and cloze them, rather than shipping a long paragraph as a Basic Q→A back.
 26. **Most numbers don't belong inside a cloze** — anti-pattern stub; full treatment at **D3**. Corrective rule: numbers have to earn their place inside a cloze. Default fixes are reverse the direction (cloze the thing, not the number), move to the extra field, or simplify to a less-precise testable fact. Allowed in cloze only if short, doctrinally canonical, and itself the testable atom (`Role 1`, `S4`, `4 vehicles`).
-27. **Don't redundantly cloze abbreviations inside other templates** — anti-pattern stub; full treatment at **D1**. Corrective rule: keep the abbreviation visible in the heading line and ship a separate Basic acronym card per §24 for the actual lookup direction.
+27. **Don't redundantly cloze abbreviations inside other templates** — anti-pattern stub; full treatment at **D1**. Corrective rule: keep the abbreviation visible in the heading line and ship a separate multi-cloze acronym note per §24 (in the central Acronyms deck) for the actual lookup direction.
 28. **Answer leaks via derivation** — anti-pattern stub; full treatment at **D8**. Beyond synonym leaks (§5) and elimination (§6), watch for derivation leaks: arithmetic, logical complement, cardinality, or format hints. Corrective rule: before shipping, ask if a forgetful student could answer the cloze without recalling the testable knowledge. If yes, drop or rearrange the leaking element.
-30. **Show acronym OR expansion, never both** — anti-pattern stub; full treatment at **D11**. Corrective rule: pick one form per card. The acronym lookup direction lives in its own one-direction Basic card per §24; every other card uses either the acronym alone or the expansion alone, never both visible together.
+30. **Show acronym OR expansion, never both** — anti-pattern stub; full treatment at **D11**. Corrective rule: pick one form per card. The acronym lookup direction lives in its own multi-cloze acronym note per §24 (in the Acronyms deck); every other card uses either the acronym alone or the expansion alone, never both visible together.
 
 ### Note-author craft
 
@@ -166,7 +166,7 @@ Don't card a topic just because it appears in the source. The most common error 
   - **Symmetric pair** → §12 Basic-and-Reversed.
   - **Taxonomic list / multi-fact statement** → cloze atomization (§1, §4).
   - **Definition** → cloze body with examples in extra (§5).
-  - **Acronym** → §24 one-direction Basic.
+  - **Acronym** → §24 multi-cloze per word, routed to the central `<TOPIC>::Acronyms` sub-deck (doesn't count against per-module budget).
   - **Image-diagram (only when the LO requires)** → image-as-prompt Basic per §12 / **D2**.
 
 Identify **domain templates** (§23) — what reusable patterns will dominate this deck? For a medical deck: disease, drug, anatomical region, syndrome. For a history deck: event, person, treaty, war. **Define 3-7 templates with fixed slot orders before drafting any cards.** This is the single highest-leverage step in deck design.
@@ -175,7 +175,7 @@ Other shape considerations to flag during 2e:
 
 - **Symmetric pairs** — go in Basic-and-Reversed (one note, both directions, §12)
 - **Asymmetric attribution** — flag for thin-slicing per §7
-- **Acronyms** — flag for one-direction Basic cards (§24); collect domain-specific abbreviations to use in cloze content (§25)
+- **Acronyms** — flag for multi-cloze per-word notes routed to the central Acronyms deck (§24); collect domain-specific abbreviations to use in cloze content (§25)
 - **Examples** — set aside for the `extra` field, never embed in cloze body (§5)
 - **Verbose definitions** — flag for compression, not fall-back to Basic (§21)
 - **Mnemonic opportunities** — note where memorable hooks (alliteration, visual associations, acronyms) would help; high-yield mnemonics get standalone Basic cards (§17), others go in extra field
@@ -268,7 +268,7 @@ The principles list above is the master checklist. The high-frequency per-note c
 **Format choice:**
 - Compress verbose definitions, don't fall back to Basic (#21)
 - Symmetric pairs as Basic-and-Reversed, not duplicate notes (#12)
-- Acronym-expansion as one-direction Basic (#24)
+- Acronym-expansion as multi-cloze per word, routed to Acronyms deck (§24)
 - Asymmetric attribution thin-sliced (#7)
 - Slot labels are abstract roles, not specific values (#29)
 - First italic label works as a normalized SQL-table-like schema name, not a specific row value (#23, #29)

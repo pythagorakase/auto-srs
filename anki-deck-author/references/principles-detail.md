@@ -673,22 +673,38 @@ Lesion template (15 cards used "brainstem syndrome:")
 
 ---
 
-## §24 — Acronym-expansion as one-direction Basic
+## §24 — Acronyms as multi-cloze per word, routed to a central Acronyms deck
 
-**Failure mode:** Treating acronyms like full vocabulary terms (basic-reversed for term ↔ definition) is unnecessary work. You only encounter acronyms one way in source material — you read "JME" in a textbook and need to know it means juvenile myoclonic epilepsy. The reverse direction (knowing JME's expansion → recognizing the acronym) happens naturally as you read.
+**Failure mode:** Treating an acronym lookup as a single Basic card (acronym front → full expansion back) makes recall all-or-nothing. Short, "logical" acronyms whose words flow naturally (`JME` = juvenile myoclonic epilepsy) survive this format fine. Longer or less-mnemonic acronyms (`TLAMM` = theater lead agent for medical materiel; `USAMMC` = United States Army Medical Materiel Center) make partial recall the norm — the student remembers four of five words, grades **Again**, and the words they actually know lose progress alongside the one they don't. A single failed word collapses scheduling on the rest.
 
-**Pattern:**
+**Pattern:** atomize the expansion across cloze ordinals — one cloze per content word — and route the note to a central `<TOPIC>::Acronyms` sub-deck.
+
 ```
-Front: JME
-Back:  juvenile myoclonic epilepsy
-
-Front: AC<div>(biochemistry)</div>
-Back:  adenylyl cyclase
+<i>acronym:</i><br>TLAMM<br>
+<i>expansion:</i><br>{{c1::theater}} {{c2::lead}} {{c3::agent}} for {{c4::medical}} {{c5::materiel}}
 ```
 
-**The domain disambiguator** (`<div>(biochemistry)</div>`) is essential when an acronym overlaps domains. `AC` is adenylyl cyclase in biochem, alternating current in physics, air conditioning in HVAC. The disambiguator scopes the recall to the right domain.
+The acronym is the fixed prompt — visible on every card in the family. Each content word of the expansion is hidden under its own cloze ordinal, generating one card per word. The student grades each word independently — four-of-five recall is four Goods and one Again, not five Agains. The acronym's letter for each position is the cue that disambiguates which word is needed: "the M-word in TLAMM" is `medical`. That's the acronym's job — providing structural scaffolding for the expansion.
 
-**Use plain Basic, not Basic-and-Reversed.** This is one of the few cases where one-direction is actually correct. Saves you from drilling cards you'd never encounter in practice.
+**Variations:**
+
+- **Linked clozes for paired words.** When two consecutive words form a tight semantic unit (`Air Force`, `United States`), use the same cloze ordinal for both: `{{c1::Air}}&nbsp;{{c1::Force}} {{c2::medical}}…`. Test what the student would actually recall as one unit.
+- **Function words stay visible.** Connectors (`for`, `of`, `the`, `and`) are scaffolding, not content. Leave them visible — clozing them is busywork. Cloze them only when omitting them would make the expansion ambiguous.
+- **Domain disambiguator slot.** When the acronym overlaps domains, add an `<i>domain:</i>` slot: `<i>acronym:</i><br>AC<br><i>domain:</i><br>biochemistry<br><i>expansion:</i><br>{{c1::adenylyl}} {{c2::cyclase}}`. `AC` is adenylyl cyclase in biochem, alternating current in physics, air conditioning in HVAC — the disambiguator scopes the recall.
+- **Cloze ordinals don't have to follow word order.** Authors sometimes assign ordinals by recall difficulty or salience rather than position; that's fine. The student sees one card per ordinal — order in the source text doesn't propagate.
+
+**Deck routing.** Acronym notes route to a single `<TOPIC>::Acronyms` sub-deck regardless of which source module produced them. This is a deliberate departure from the standard `<TOPIC>::<CODE>::<SubDeck>` convention (see `references/workflows.md` path conventions). Three reasons:
+
+1. **Cross-module reuse.** An acronym introduced in module A (e.g., `MTF`) shows up across modules B, C, D. One central deck means one note, no duplicates, no decision about "which module owns this acronym."
+2. **Budget separation.** The deck-size budget for a content module is about *content density*, not *vocabulary breadth*. Acronym cards don't count against per-module budgets — they're a shared lookup index that grows monotonically across modules.
+3. **Review pacing.** Acronym lookup is high-frequency / low-difficulty per card; mixing it with content cards distorts the review session's pacing.
+
+**When one-direction Basic is still fine.** If the acronym is short and the expansion is 1–2 trivial words that don't decompose into independent recall units (`CT` = computed tomography), multi-cloze is overkill — a one-direction Basic works. Rough threshold: 3+ content words → multi-cloze; 1–2 content words → Basic is acceptable. When in doubt, prefer multi-cloze; the cost of being wrong toward more atomization is low.
+
+**Cross-references:**
+- **§1, §4** (atomization, aggressive cloze coverage) — this is atomization applied to the acronym-expansion case. Each content word is the testable atom.
+- **§27** (don't redundantly cloze abbreviations inside other templates) — the acronym lookup belongs in its own card in the Acronyms deck, not embedded as a slot in unit/disease templates.
+- **§30** (show acronym OR expansion, never both) — when the acronym appears in any other note, only the acronym shows; the expansion lives only in the Acronyms deck note.
 
 ---
 
@@ -726,7 +742,7 @@ Six clozes, three `@` operators, two structural `+` connectors. The card carries
 **The trade-off:** terse content = faster reviews = more reviews = better retention. But abbreviations need to be learned first. So:
 
 - Abbreviations introduced by the source material → use them everywhere
-- Novel abbreviations you (the author) coin → make a Basic acronym-expansion card per #24 first, then use freely
+- Novel abbreviations you (the author) coin → make a multi-cloze acronym note per §24 first (in the central Acronyms deck), then use freely
 - One-off compression → don't bother; readability matters more
 
 **Example of dense, compressed content** (from real deck):
@@ -755,7 +771,7 @@ Exact recall of high-precision numbers (decimals, percentages, large counts, fra
 
 *Anti-pattern stub. Full treatment with worked example at **D1** in `references/common-ai-drift.md`.*
 
-Clozing the abbreviation inside a unit/disease/section template tests name → abbreviation, the wrong direction. Abbreviations are looked up, not recalled from full names. Corrective rule: keep the abbreviation visible in the heading line (`<i>unit:</i><br>MLMC (medical logistics management center)`) and ship a separate Basic acronym card per §24 for the actual lookup.
+Clozing the abbreviation inside a unit/disease/section template tests name → abbreviation, the wrong direction. Abbreviations are looked up, not recalled from full names. Corrective rule: keep the abbreviation visible in the heading line (`<i>unit:</i><br>MLMC (medical logistics management center)`) and ship a separate multi-cloze acronym note per §24 (in the central Acronyms deck) for the actual lookup.
 
 ---
 
@@ -802,10 +818,10 @@ This is §23 made strict: §23 says "fixed slot order across the template family
 
 *Anti-pattern stub. Full treatment with worked example at **D11** in `references/common-ai-drift.md`.*
 
-Pairing `{{c1::ambulance loading point}} (ALP)` lets the student decode the cloze from the parenthetical. Corrective rule: pick one form per card. The acronym → expansion lookup direction lives in its own one-direction Basic card per §24; every other card uses either the acronym alone or the expansion alone, never both visible together.
+Pairing `{{c1::ambulance loading point}} (ALP)` lets the student decode the cloze from the parenthetical. Corrective rule: pick one form per card. The acronym → expansion lookup direction lives in its own multi-cloze acronym note per §24 (in the central Acronyms deck); every other card uses either the acronym alone or the expansion alone, never both visible together.
 
 **Cross-references — three principles, three problems:**
-- **§24** — acronym → expansion lives in its own one-direction Basic card (the *which-card-handles-lookup* answer)
+- **§24** — acronym → expansion lives in its own multi-cloze acronym note in the Acronyms deck (the *which-card-handles-lookup* answer)
 - **§27** — don't cloze the abbreviation slot inside a template (the *direction* problem)
 - **§30** — don't pair expansion with acronym anywhere a cloze answer is involved (the *leak* problem)
 

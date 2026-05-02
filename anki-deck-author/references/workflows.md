@@ -40,6 +40,8 @@ out_dir = os.path.join(REPO_ROOT, "temp", "decks")
 
 The convention `<TOPIC>::<CODE>::<SubDeck>` is the standard internal deck-name shape for tree nesting in Anki. `<TOPIC>` is your top-level grouping (curriculum, semester, exam track), `<CODE>` is the module/source identifier, `<SubDeck>` is a content slice. Substitute consistently within a deck family.
 
+**Cross-module deck families** deliberately break this convention. The canonical case is acronyms: a single `<TOPIC>::Acronyms` sub-deck collects acronym-lookup notes from every module so the student maintains one centralized index — no duplicates, no per-module ownership decisions. Acronym notes don't count against per-module deck-size budgets; the Acronyms deck grows monotonically across modules. See §24 for the multi-cloze-per-word format and the rationale.
+
 ## Pattern 0 — Outline-first authoring with yield gate
 
 **When:** any deck-authoring task with a non-trivial source (PDF slide pack, lecture notes, multi-page document). Effectively always — the only time to skip Pattern 0 is when the user provides a hand-curated set of facts that already passed their own triage.

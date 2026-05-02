@@ -47,7 +47,7 @@ D4, D7, and D19 require judgment the regex-based linter can't make: D4 (asymmetr
 
 **Why it's wrong:** the test direction is wrong. The student encounters the abbreviation in the wild and looks up the expansion — never the reverse. Clozing the abbreviation tests name → abbreviation, which the student doesn't need to drill.
 
-**Corrective rule (per #24, #27):** put the abbreviation in the heading line: `<i>unit:</i><br>MLMC (medical logistics management center)`. Drop the abbreviation slot. Ship a separate Basic acronym card if the student needs the lookup direction.
+**Corrective rule (per §24, §27):** put the abbreviation in the heading line: `<i>unit:</i><br>MLMC (medical logistics management center)`. Drop the abbreviation slot. Ship a separate multi-cloze acronym note in the central Acronyms deck (per §24) if the student needs the lookup direction.
 
 ---
 
@@ -204,11 +204,11 @@ sector {{c1::1}} = {{c2::capability}} (e.g., radar)
 
 **Why AI does this:** when the source material introduces a term with its acronym (`ambulance loading point (ALP)`), the AI faithfully copies both. The pairing reads naturally — feels informative, like "showing your work." It also feels safer: if the student can't recall the expansion, the acronym serves as a hint.
 
-**Why it's wrong:** the parenthetical neutralizes the cloze. The student sees `[...] (ALP)` and decodes "ambulance loading point" from the acronym. The card now tests acronym → expansion lookup — and that lookup is already owned by a separate Basic acronym card per §24. The cloze teaches nothing it didn't already teach.
+**Why it's wrong:** the parenthetical neutralizes the cloze. The student sees `[...] (ALP)` and decodes "ambulance loading point" from the acronym. The card now tests acronym → expansion lookup — and that lookup is already owned by a separate multi-cloze acronym note per §24 (in the central Acronyms deck). The cloze teaches nothing it didn't already teach.
 
 The reverse direction is just as bad: `{{c1::ALP}} (ambulance loading point)` lets the student decode ALP from the visible expansion.
 
-**Corrective rule (per §30):** ship one form per card. Pick the acronym alone OR the expansion alone. The acronym lookup direction (acronym → expansion) lives in its own one-direction Basic card per §24. Every other card trusts that lookup card and uses one form consistently.
+**Corrective rule (per §30):** ship one form per card. Pick the acronym alone OR the expansion alone. The acronym lookup direction (acronym → expansion) lives in its own multi-cloze acronym note per §24 (in the central Acronyms deck). Every other card trusts that lookup card and uses one form consistently.
 
 The exception (per §27): a heading line like `<i>unit:</i><br>MLMC (medical logistics management center)` is fine — that's a non-clozed disambiguator, not a paired cloze. The lint rule `D11-acronym-expansion-pair` only fires when the cloze answer itself is paired with a parenthetical acronym/expansion of the answer.
 

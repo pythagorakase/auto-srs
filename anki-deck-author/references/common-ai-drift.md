@@ -28,8 +28,9 @@ Each drift pattern maps to one or more principles in `SKILL.md` and `principles-
 | D16   | §23                 | `D16-untemplated-cloze-list`       |
 | D17   | §2, §4, §28         | `D17-mixed-repeat-cloze-state`     |
 | D18   | §23, §29            | `D18-overfit-entity-label`         |
+| D19   | §23, §31            | not implemented (semantic)         |
 
-D4 and D7 require semantic understanding (asymmetric attribution, deciding when a Basic Q→A *should* have been a compressed cloze) that the regex-based linter can't do. Catch them in the fresh-agent leak audit (SKILL.md workflow step 7) instead.
+D4, D7, and D19 require judgment the regex-based linter can't make: D4 (asymmetric attribution) and D7 (verbose-Basic-vs-compressed-cloze) need semantic understanding; D19 (high-volume low-density output from one source) needs source-topic attribution that lives outside the .apkg. Catch them in the fresh-agent leak audit (SKILL.md workflow step 7) instead.
 
 ---
 
@@ -365,6 +366,41 @@ The same rule applies when a repeated term is clozed under different ordinals; r
 ```
 
 The linter flags italic labels containing common platform/model designators such as `HH-60M`, `M997A1`, or `M1133`. Use `lint-ok-d18` only after manually confirming the entity-specific label is genuinely clearer than normalization.
+
+---
+
+## Drift #19 — High-volume, low-density output from one source
+
+**The pattern:** a family of 3+ notes sharing the same template signature, where most notes have ≤1 testable atom each and the labels are vague or editorial:
+
+```
+<i>patient movement policy fact:</i><br>constraint<br><i>value:</i><br>{{c1::operational environment}}
+<i>patient movement policy fact:</i><br>decision driver<br><i>value:</i><br>{{c1::clinical imperatives}}
+<i>patient movement policy fact:</i><br>development input<br><i>value:</i><br>{{c1::JCS advice}}
+<i>patient movement policy fact:</i><br>not<br><i>value:</i><br>hold until {{c1::last policy day}}
+```
+
+(...continuing for 5 more notes from the same source slide.)
+
+**Why AI does this:** when source material is editorial scaffolding (a slide of vague bullets, a transition page, a "considerations include..." enumeration), the AI tries to extract testable atoms from text that doesn't actually contain any. Templating helps the output *look* uniform — same italic slot signature across the family — so it superficially looks like §23 reusable-template practice. The linter checks per-note rules and doesn't catch slide-level over-extraction, so each note passes lint and the family ships.
+
+**Why it's wrong:** read the family together (which the per-note linter never does) and the failure becomes obvious. Each note in isolation looks plausible; the family read in aggregate reveals that the source had nothing to teach. The student studies a deck full of notes whose answers are not memorable atoms, only positions in an arbitrary list. Worse, the family burns review budget that should have gone to high-yield content elsewhere in the deck.
+
+The single-word slot labels (`not`, `constraint`, `development input`) are themselves a tell: D14 (vague/editorial labels) catches them per-note, but the underlying problem is upstream — the topic should have been gated out by §31 before authoring.
+
+**Corrective rule:** at the self-audit (SKILL.md Step 6) or fresh-agent audit (Step 7), look for families of 3+ notes sharing a template signature where most notes have ≤1 atom and labels are vague. When you find one:
+
+1. Identify the originating source (slide / topic).
+2. Re-judge the topic against §31's three-condition test: ≥3 atomic facts, otherwise-not-recallable, LO-aligned.
+3. If the topic fails any condition, **delete the entire family**. Don't try to salvage individual notes — the topic is scaffolding.
+4. If the topic actually passes §31 and you still authored a low-density family, the schemas were wrong. Re-plan in 2e: maybe the content is a definition (§5), maybe a process flow, maybe a single context note in `extra`.
+
+**Why this isn't lint-detectable:** the linter sees notes, not the topics they came from. Without source attribution (note → topic / slide), it can't ask "did this topic deserve N notes?" Future heuristics could flag families where (template-signature note count ≥ K) AND (median atom-per-note ≤ M), but real coverage probably needs `src_topic` embedded in note tags OR the linter reading the Step 2.5 outline YAML alongside the .apkg.
+
+**Cross-references:**
+- **§31** (yield-density triage gate) — the upstream principle. D19 is the post-hoc signal that §31 was missed.
+- **D14** (vague/editorial labels) — the per-note signal of the same problem. D14 catches the symptom; §31/D19 are the root cause.
+- **SKILL.md Step 7** (fresh-agent audit) — where D19 is operationally caught.
 
 ---
 

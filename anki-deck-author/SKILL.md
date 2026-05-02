@@ -56,7 +56,7 @@ Two artifacts cover the design rules from different angles:
 
 Where a principle is fundamentally an anti-pattern ("don't do X") and has a corresponding D# entry in the drift catalog, the principles list keeps a one-line **stub** — preserving the §-number for citation but deferring the deep treatment to the drift catalog. The mapping table in `common-ai-drift.md` is the cross-index.
 
-**Numbering convention:** §1–§30 and D1–D18 are stable IDs. Append new entries; never renumber. Retired or stubbed entries stay in place with a forward-pointer.
+**Numbering convention:** §1–§32 and D1–D19 are stable IDs. Append new entries; never renumber. Retired or stubbed entries stay in place with a forward-pointer.
 
 ## The 30 principles
 
@@ -112,6 +112,11 @@ Where a principle is fundamentally an anti-pattern ("don't do X") and has a corr
 23. **Reusable templates per domain** — define a finite set of structural templates (3-7 per major content domain) and reuse them ruthlessly. A medical deck might have templates for `disease`, `drug`, `anatomical region`, `lesion`, `reflex`, `syndrome`. Each template has a fixed slot order (e.g., disease: `etiology → presentation → pathology → treatment`). The student internalizes the slot order across many cards, so cloze deletions become predictable lookups instead of structural surprises. **Massive reduction in cognitive friction** — the hardest part of card review is parsing layout; templates make layout invisible. §23.
 29. **Slot labels are abstract roles, not specific values** — when a template's slot label varies per note (`<i>field surgeon:</i>` on one card, `<i>command surgeon:</i>` on the next), the slot label is acting as a value. The actual structural slot is `<i>position:</i>` and `field surgeon` is its value. First-label table-name test: `<i>vehicle:</i>` is a usable schema; `<i>HH-60M crew station:</i>` is under-normalized. Symptoms: the template doesn't generalize (every position or platform needs a custom label), and clozes are unlabeled (the student can't tell whether `{{c1::O4}}` is a rank, a section size, or something else). Lift the value out of the label so the same template works for every instance. §29.
 
+### Triage & yield
+
+31. **Yield-density triage gate** — full treatment in `references/principles-detail.md` §31. The unit of judgment is the **topic / information unit, not the slide**. A topic earns notes only when it has ≥3 atomic facts that are LO-aligned and not available at test-time without memorization. Otherwise compress to a single context note or skip. See also **D19** for the post-hoc detection signal.
+32. **Bundle dense matrices as bidirectional families** — full treatment in `references/principles-detail.md` §32. N × M matrices get one shared template (per §23), one note per cell, and multi-cloze for bidirectional testability per cell. Don't collapse to single-cloze-per-row. The `<u>...</u>` top-header is **optional**, used only when it shortens slot labels (most matrices don't need one).
+
 ## Workflow
 
 ### 1. Capture intent
@@ -126,27 +131,95 @@ Use `AskUserQuestion` if anything material is ambiguous. Don't over-ask, but don
 
 **Adjacent-topic prompt:** when the user gives a source, also ask whether they want adjacent topics covered (e.g., "you sent CO 101 — want me to also cover staff sections, command relationships, etc., even though they're not in this PDF?"). Source material rarely covers everything that's testable.
 
-### 2. Triage the content
+### 2. Prepare and structure the content
 
-Read the source. Identify:
-- **Learning objectives — read them first.** Most slide decks state their LOs on page 1–2. They are the cleanest signal of which test directions to use, and they prevent over-coverage in directions the test won't actually require. Map LO verbs to test directions:
-  - "describe / interpret / decode symbols" → **image → name** (one-direction Basic, image on FRONT, per §12 and drift #2)
+The source-to-cards path is a pipeline, not a single forward pass. Run the stages below end-to-end *before* drafting any manifest entries. Stages 2a–2b are mechanical. Stages 2c–2e are the substantive judgment work and feed the artifact reviewed in Step 2.5.
+
+**2a. Extract.** Pull text from the source — PDF → text, slides → notes, etc. Use whatever extraction tooling fits (`pymupdf`, `pdftotext`, slide-deck plugins, OCR for scanned material). Preserve identifiable structure (headings, tables, lists) where the extractor surfaces it. Don't filter yet — get everything.
+
+**2b. Clean / format.** Normalize whitespace, strip slide-deck chrome (page numbers, boilerplate footers, repeated section headers), collapse list bullets to canonical form, fix line-wrap artifacts. Output is the raw content, normalized.
+
+**2c. Organize.** Group the content by **topic / information unit, not by slide**. Topics may span slides; a single slide may contain multiple unrelated topics; some slides contribute nothing testable. The slide is a presentation container, not a content unit. **Read learning objectives early** — most slide decks state their LOs on page 1–2, and they are the cleanest signal of which topics are testable and which test directions to drill. Map LO verbs to test directions:
+
+  - "describe / interpret / decode symbols" → **image → name** (one-direction Basic, image on FRONT, per §12 and **D2**)
   - "explain / list / identify capabilities of X" → **text-only cloze atomization**
   - "define / use vocabulary" → **term ↔ definition** Basic-and-Reversed
   - "calculate / determine quantities" → cloze with §26 numeric-allowance discipline
 
-  **When the LOs don't mention a category, don't invent that test direction.** A deck whose source has unit-symbol illustrations on the slides but no symbol-decoding LO should not ship symbol → name cards just because the symbols are visible. Image extraction is a real cost (PDF cropping, header artifacts, media-folder bloat) that should only be paid when the LO requires it.
+**When the LOs don't mention a category, don't invent that test direction.** A deck whose source has unit-symbol illustrations on the slides but no symbol-decoding LO should not ship symbol → name cards just because the symbols are visible. Image extraction is a real cost (PDF cropping, header artifacts, media-folder bloat) that should only be paid when the LO requires it.
 
-  Symbol-heavy decks are the exception, not the default. Most modules are text-only and the LO will reflect that. The canonical symbology exception (from this skill's originating use case, the Army CCC's CO 101 module) had an LO explicitly directing "describe military unit symbols, control measures, and tactical mission symbols" — a clear image-decoding signal that justified the image-extraction cost.
+Symbol-heavy decks are the exception, not the default. Most modules are text-only and the LO will reflect that. The canonical symbology exception (from this skill's originating use case, the Army CCC's CO 101 module) had an LO explicitly directing "describe military unit symbols, control measures, and tactical mission symbols" — a clear image-decoding signal that justified the image-extraction cost.
 
-- **Domain templates** (#23) — what reusable patterns will dominate this deck? For a medical deck: disease, drug, anatomical region, syndrome. For a history deck: event, person, treaty, war. **Define 3-7 templates with fixed slot orders before drafting any cards.** This is the single highest-leverage step in deck design.
-- **Clozable concepts** — multi-fact statements, lists, attribution maps, taxonomies
-- **Symmetric pairs** — go in basic-and-reversed (one note, both directions)
-- **Asymmetric attribution** — flag for thin-slicing per principle #7
-- **Acronyms** — flag for one-direction Basic cards (#24); collect domain-specific abbreviations to use in cloze content (#25)
-- **Examples** — set aside for the `extra` field, never embed in cloze body
-- **Verbose definitions** — flag for compression, not fall-back to Basic
-- **Mnemonic opportunities** — note where memorable hooks (alliteration, visual associations, acronyms) would help; high-yield mnemonics get standalone Basic cards (#17), others go in extra field
+**2d. Prioritize (yield gate, §31).** For each topic, judge yield:
+
+  - **High** — 3+ atomic, high-yield, otherwise-not-recallable facts, LO-aligned. Author as a card-family.
+  - **Medium** — fewer atoms, but the topic IS testable. Compress to 1–2 cards or fold into a related high-yield topic.
+  - **Skip** — editorial scaffolding, definitional throat-clearing, content already covered by background knowledge. Don't card.
+  - **Extra** — examples, mnemonics, illustrative anecdotes that support memorization but aren't the testable atom. Plan to put in `extra` field per §5 / §17.
+
+Don't card a topic just because it appears in the source. The most common error is *templated nonsense from low-yield content* (**D19**) — chasing template uniformity at the cost of yield. §31 is the gate that prevents this; D19 is the post-hoc signal that §31 was missed.
+
+**2e. Plan cloze schemas.** For each high-yield topic, match the structural shape to the right principle:
+
+  - **Dense numerical / categorical matrix** → §32 bundled (one note per cell, shared template, multi-cloze test in multiple directions). Optional `<u>...</u>` header *only* when it shortens slot labels.
+  - **Asymmetric attribution (1 vs N)** → §7 thin-slicing.
+  - **Symmetric pair** → §12 Basic-and-Reversed.
+  - **Taxonomic list / multi-fact statement** → cloze atomization (§1, §4).
+  - **Definition** → cloze body with examples in extra (§5).
+  - **Acronym** → §24 one-direction Basic.
+  - **Image-diagram (only when the LO requires)** → image-as-prompt Basic per §12 / **D2**.
+
+Identify **domain templates** (§23) — what reusable patterns will dominate this deck? For a medical deck: disease, drug, anatomical region, syndrome. For a history deck: event, person, treaty, war. **Define 3-7 templates with fixed slot orders before drafting any cards.** This is the single highest-leverage step in deck design.
+
+Other shape considerations to flag during 2e:
+
+- **Symmetric pairs** — go in Basic-and-Reversed (one note, both directions, §12)
+- **Asymmetric attribution** — flag for thin-slicing per §7
+- **Acronyms** — flag for one-direction Basic cards (§24); collect domain-specific abbreviations to use in cloze content (§25)
+- **Examples** — set aside for the `extra` field, never embed in cloze body (§5)
+- **Verbose definitions** — flag for compression, not fall-back to Basic (§21)
+- **Mnemonic opportunities** — note where memorable hooks (alliteration, visual associations, acronyms) would help; high-yield mnemonics get standalone Basic cards (§17), others go in extra field
+
+### 2.5. Outline before authoring (yield gate)
+
+Before drafting any cards, emit a structured outline of the source as a YAML file at `temp/build/<deck>-outline.yaml`. The outline commits to **topic-level** yield, shape, and estimated note count BEFORE the manifest is drafted, so the user can sample-review yield judgments early — when redirecting is cheap.
+
+**The outline is keyed by topic / information unit, not by slide.** Each topic carries `source_refs` (the list of slides/pages it draws from) as metadata. A topic spanning slides 9–11 is one entry with `source_refs: [9, 10, 11]`. A slide containing two unrelated topics produces two separate entries that both reference that slide. This is the artifact that operationalizes "the slide is a presentation container, not a content unit."
+
+**Schema:**
+
+```yaml
+deck: <topic>::<code>
+source: courses/<course>/<file>.pdf
+topics:
+  - id: evacuation_standards
+    source_refs: [17]              # list of slide / page numbers (one or many)
+    yield: high                    # high | medium | skip  (per §31)
+    shape: matrix                  # matrix | bullets | prose | definition |
+                                   #   process-flow | image-diagram | acronym-list
+    dimensions: [3, 2]             # required for matrix; row × col
+    axes: [priority, stage]        # required for matrix; axis labels
+    est_notes: 6                   # estimated note count (matches dims for matrices)
+    rationale: "6 cells of doctrinally canonical integer timing data; LO #N"
+  - id: patient_movement_policy
+    source_refs: [24]
+    yield: skip
+    shape: bullets
+    est_notes: 0
+    rationale: "editorial bullets; no atomic facts; fails §31 condition (a)"
+  - id: triage_decision_flow         # example of a topic spanning multiple slides
+    source_refs: [9, 10, 11]
+    yield: high
+    shape: process-flow
+    est_notes: 4
+    rationale: "decision-tree atoms across the 3-slide flow; LO #M"
+```
+
+Apply §31 (yield-density gate) to set `yield`. Apply §32 (matrix bundling) when `shape: matrix` — `est_notes` should equal the product of `dimensions`. Topics with `yield: skip` produce zero notes.
+
+**Mandatory user-review gate.** Show the outline file path to the user and wait for explicit approval before proceeding to Step 3. This is the yield-stage analog of Step 5's sample review: catch over- and under-extraction at the topic level before they propagate into manifest entries that are expensive to delete.
+
+**Step 5 reviews execution; Step 2.5 reviews yield.** The two user-review gates have different jobs. Step 2.5 asks "did we pick the right topics and the right shapes?" Step 5 asks "given those topics and shapes, did we author the cards correctly?"
 
 ### 3. Draft the card manifest as data
 
@@ -200,11 +273,13 @@ The principles list above is the master checklist. The high-frequency per-note c
 - Slot labels are abstract roles, not specific values (#29)
 - First italic label works as a normalized SQL-table-like schema name, not a specific row value (#23, #29)
 
-**Numbering convention:** principle numbers (§1–§30) and drift numbers (D1–D18) are stable IDs. Append new entries; never renumber. Retired entries become a one-line stub ("§17 — retired, see §X") rather than triggering a renumber across the docs and the linter.
+**Numbering convention:** principle numbers (§1–§32) and drift numbers (D1–D19) are stable IDs. Append new entries; never renumber. Retired entries become a one-line stub ("§17 — retired, see §X") rather than triggering a renumber across the docs and the linter.
 
 ### 5. Show a sample to the user before bulk-generating
 
 Pick 3–5 representative notes covering different card types. The user catches convention drift faster than you will.
+
+This is the second of two user-review gates. **Step 5 reviews execution; Step 2.5 reviews yield.** Step 2.5 caught "did we pick the right topics and shapes?"; Step 5 catches "given those topics and shapes, did we author the cards correctly?"
 
 ### 6. Self-audit: walk through the antipattern checklist
 
@@ -227,6 +302,7 @@ Before packaging, walk through each note against the drift catalog (`references/
 15. Heading plus bare cloze list that should become labeled slots? (#23)
 16. Repeated strings mixed between visible text and cloze answers, or clozed under multiple unlinked ordinals? (#2)
 17. Entity-specific italic labels that should be normalized into an abstract first-label/table schema? (#23, #29)
+18. High-volume, low-density output from a single source — 3+ notes sharing a template signature with ≤1 atom each and vague labels? (§31, D19)
 
 Fix flagged cards or annotate why each flag is a false positive.
 

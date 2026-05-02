@@ -1,0 +1,29 @@
+{
+  "skill_name": "anki-deck-author",
+  "evals": [
+    {
+      "id": 0,
+      "name": "cranial-nerves",
+      "prompt": "i'm prepping for usmle step 1. make me an anki deck for the 12 cranial nerves — i need to drill (1) name ↔ number, (2) primary function(s), and (3) which foramen each one passes through. some nerves do multiple things (CN VII does motor for facial expression AND parasympathetic for lacrimal/salivary AND taste from anterior 2/3 of tongue) so i want to actually recall function→nerve for those, not just nerve→function. couple weeks until the test.",
+      "expected_output": "An .apkg file with: (a) basic-reversed notes for nerve name ↔ Roman numeral, (b) cloze cards for function lists with thin-slicing for nerves with multiple functions (e.g., separate single-cloze notes for 'CN VII does motor for facial expression', 'CN VII does parasympathetic for lacrimal', etc.), (c) basic-reversed for nerve ↔ foramen. Examples (when present) should be in extra field, not cloze body. Lowercase outside headings; preserve Roman numerals (II, III, VII, etc.) and acronyms (CN).",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 1,
+      "name": "spanish-verbs",
+      "prompt": "i'm learning spanish. make me an anki deck for the 15 most common irregular verbs in present tense. i want both directions — given the infinitive, produce the 6 conjugated forms (yo, tú, él/ella, nosotros, vosotros, ellos/ellas), AND given a conjugated form, identify the infinitive and the person/number. include a couple of example sentences per verb.",
+      "expected_output": "An .apkg file with basic-reversed notes (infinitive ↔ conjugated forms) where appropriate, and dedicated single-cloze notes for child-→parent attribution where needed (a specific conjugated form → which verb + person). Example sentences should be in extra field, not in cloze body. Lowercase outside headings; Spanish accent marks preserved.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 2,
+      "name": "mental-models",
+      "prompt": "charlie munger talks about a latticework of mental models. make me an anki deck of the 12 most-cited ones — confirmation bias, sunk cost fallacy, opportunity cost, second-order thinking, that kind of thing. each card should let me drill the name, a one-sentence definition, and a real-world example. i want to test both directions — see the model name and recall the definition, AND see a scenario and identify which model applies.",
+      "expected_output": "An .apkg file with basic-reversed notes for model name ↔ definition, plus separate cards for scenario → model attribution. Real-world examples should live in extra field (per principle §5 — they would leak the answer if in the cloze body or definition). Headings in title case; bodies lowercase.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}
